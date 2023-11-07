@@ -73,22 +73,18 @@ if __name__ == "__main__":
         model.load_state_dict(checkpoint, strict=False)
         llm = Llama(model, tokenizer, device)
         transcript = []
-        with open (args.input, "r") as in_file:
+        with open (args.input_file, "r") as in_file:
             for x in in_file:
-                statement = x.read()
-                query = None
-        
-                while True:
-                    query = statement.strip()
-                    if query == "exit":
-                        break
-                    transcript.append(query)
-                    resp = llm.text_completion([query])[0]
-                    print(resp["generation"])
-                    transcript.append(resp["generation"])
-            if args.output:
-                with open(args.output, "wt") as ofd:
-                    ofd.write(json.dumps(transcript, indent=2))
+                query = x.strip()
+                transcript.append(query)
+                response = []
+                response.append(statement)
+                resp = llm.text_completion(query)
+                response.append(resp)
+                transcript.append(response)
+        if args.output:
+            with open(args.output, "wt") as ofd:
+                ofd.write(json.dumps(transcript, indent=2))
     except Exception as e:
         raise e
     finally:

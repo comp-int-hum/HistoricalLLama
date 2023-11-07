@@ -43,9 +43,14 @@ seg_result = args.seg_test
 
 full_arg_list = []
 
+#adding in the prompt 
+
+
 for x in args.prompt:
     full_arg_list.append(x)
 full_arg_list = "".join(full_arg_list)
+
+
 def make_ocr(the_file, seg_no = ""):
     text_file = []
  #   print("in the make ocr function")
@@ -114,11 +119,13 @@ with zipfile.ZipFile(args.input_file, 'r') as zip_file:
                     #        print(counter)
                 
                 
-                doc = Image.open(io.BytesIO(x.read()))
-                out_text = make_ocr(doc)
-                text_list.append([line, out_text])
-                counter = counter + 1
-                print(counter)
+                    doc = Image.open(io.BytesIO(x.read()))
+                    out_text = make_ocr(doc)
+                    text_list.append([line, out_text])
+                    counter = counter + 1
+                    print(counter)
+
+
 #with open (pathway, 'r') as zip_file:
  #   doc = fitz.open(zip_file)
     #print("in the basic open ")

@@ -2,11 +2,11 @@ llama @ git+https://github.com/comp-int-hum/llama.git@ea80eb454606866e73b48a4fa6
 steamroller
 pillow
 pytesseract
-PyPDF2
-pymupdf
-opencv-python
-tensorflow
-tensorrt
-kraken
-nltk
+#PyPDF2
+#pymupdf
+#opencv-python
+#tensorflow
+#tensorrt
+#kraken
+#nltk
 

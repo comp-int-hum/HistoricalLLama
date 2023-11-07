@@ -25,7 +25,7 @@ import pickle
 # example, changing the number of folds).
 vars = Variables("custom.py")
 vars.AddVariables(
-    ("DATASETS", "", ["/home/sbacker2/corpora/afl.zip"]),
+    ("DATASETS", "", ["/home/tom/afl.zip"]),
 ("PROMPT", "", ["this is text produced by OCR, creating numerous mistakes. please produce a cleaned version of this text, making any changes that you believe you have a 90% or above certainty about."]))
 
 # Methods on the environment object are used all over the place, but it mostly serves to
@@ -45,19 +45,7 @@ env = Environment(
         "PerformOcrPytesseract" : Builder(
             action="python  scripts/perform_ocry_pytesseract.py --output_file ${TARGETS} --input_file ${SOURCES} --grayscale ${GREYSCALE} --denoise ${DENOISE} --binary_threshold ${BINARY_THRESHOLD} --preprocess ${PREPROCESS} --test_segmentation ${TEST_SEGMENTATION} --prompt ${PROMPT}"
         ),
-       # "PerformOcrPytesseractPreprocessed" : Builder(
-        #    action="python scripts/perform_ocr_pytesseract_preprocessed.py --input_file ${SOURCES} --output_file ${TARGETS} --grayscale ${GREYSCALE} -#-denoise ${DENOISE} --binary_threshold ${BINARY_THRESHOLD}"
- #       ),
-#        "PerformOcrKeras" : Builder(
- #           action="python scripts/perform_ocr_keras.py --input_file ${SOURCES} --output_file ${TARGETS}"            
-  #      ),
-#        "CombineJson" : Builder(
- #           action="python scripts/combine_json.py --input_file ${SOURCES} --output_file ${TARGETS}"
-  #   )
       "InvokeLlama" : Builder( action = "python scripts/interactive.py --input_file ${SOURCES[0]} --output ${TARGETS[0]}")
-    # ,
-#	"PerformOcr_Segmentation" : Builder(
- #           action="python  scripts/perform_ocry_segmentation.py --output_file ${TARGETS} --input_file ${SOURCES}")
     }
 )
 
@@ -85,13 +73,6 @@ for dataset_name in env["DATASETS"]:
        #for name in env["DATASETS"]: 
        results.append(env.PerformOcrPytesseract("work/{}from{}.json".format("afl_zip_records","first100"), "/home/sbacker2/corpora/afl.zip", GREYSCALE = False, DENOISE = False, BINARY_THRESHOLD = False, PREPROCESS = False,TEST_SEGMENTATION = False, PROMPT = "this is text produced by OCR, creating numerous mistakes. please produce a cleaned version of this text, making any changes that you believe you have a 90% or above certainty about."))
 	  
-#       results.append(env.PerformOcrPytesseract("work/{}from{}.json".format(name,"PytesseractSegmentation"), x,GREYSCALE = False, DENOISE  = False, BINARY_THRESHOLD = False, PREPROCESS = False,TEST_SEGMENTATION = True ))
- #     results.append(env.PerformOcrPytesseract("work/{}from{}.json".format(name,"PytesseractPreprocessedAllOptions"),x, GREYSCALE = True, DENOISE = True, BINARY_THRESHOLD = True,PREPROCESS = True,TEST_SEGMENTATION = False  ))
-  #     results.append(env.PerformOcrPytesseract("work/{}from{}.json".format(name,"PytesseractPreprocessedGreyscale"), x, GREYSCALE = True, DENOISE  = False, BINARY_THRESHOLD = False,PREPROCESS = True,TEST_SEGMENTATION = False ))
-   #    results.append(env.PerformOcrPytesseract("work/{}from{}.json".format(name,"PytesseractPreprocessedDenoise"), x, GREYSCALE = False, DENOISE  = True, BINARY_THRESHOLD = False,PREPROCESS = True,TEST_SEGMENTATION = False   ))
-    #   results.append(env.PerformOcrPytesseract("work/{}from{}.json".format(name,"PytesseractPreprocessedBinaryThreshold"), x,GREYSCALE = False, DENOISE  = False, BINARY_THRESHOLD = True,PREPROCESS = True,TEST_SEGMENTATION = False ))
-     #  results.append(env.PerformOcrPytesseract("work/{}from{}.json".format(name,"PytesseractPreprocessedGreyscaleDenoise"), x, GREYSCALE = True, DENOISE  = True, BINARY_THRESHOLD = False,PREPROCESS = True,TEST_SEGMENTATION = False ))
-   #    results.append(env.PerformOcrKeras("work/{}from{}.json".format(name,"Keras"), x))
  
 llm_ocr = []
 
