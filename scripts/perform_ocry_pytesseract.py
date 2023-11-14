@@ -4,11 +4,11 @@ from PIL import Image
 import glob
 import io
 import pytesseract
-from PyPDF2 import PdfReader
+#from PyPDF2 import PdfReader
 import argparse
 import json
-import fitz
-import cv2
+#import fitz
+#import cv2
 import numpy as np
 import zipfile
 
@@ -55,29 +55,29 @@ def make_ocr(the_file, seg_no = ""):
     text_file = []
  #   print("in the make ocr function")
   #  print(seg_result)
-    for i in range(len(the_file)):
-        page = the_file[i]
-        pixmap = page.get_pixmap()
-        png_bytes = pixmap.tobytes()
-        image = Image.open(io.BytesIO(png_bytes))
+    #for i in range(len(the_file)):
+     #   page = the_file[i]
+    pixmap = the_file.get_pixmap()
+    png_bytes = pixmap.tobytes()
+    image = Image.open(io.BytesIO(png_bytes))
         #there are also definitely modes to further test/explore here, including page/column segmentation mode
         
-        if args.pre_process == True:
+    if args.pre_process == True:
       #      print("preprocessed!")
-            text = preprocess_image(image, settings)
-            text = pytesseract.image_to_string(text)
-            text = text.replace('\n', ' ')
-            text_file.append(text)
-        elif seg_result == True:
-       #     print("segmented!")
-            text = pytesseract.image_to_string(image,config = seg_no)
-            text = text.replace('\n', ' ')
-            text_file.append(text)
-        else:
+        text = preprocess_image(image, settings)
+        text = pytesseract.image_to_string(text)
+        text = text.replace('\n', ' ')
+        text_file.append(text)
+    elif seg_result == True:
+         #     print("segmented!")
+        text = pytesseract.image_to_string(image,config = seg_no)
+        text = text.replace('\n', ' ')
+        text_file.append(text)
+    else:
         #    print("done normally")
-            text = pytesseract.image_to_string(image)
-            text = text.replace('\n', ' ')
-            text_file.append(text)
+        text = pytesseract.image_to_string(image)
+        text = text.replace('\n', ' ')
+        text_file.append(text)
     return text_file
 
 
@@ -120,8 +120,9 @@ with zipfile.ZipFile(args.input_file, 'r') as zip_file:
                 
                 
                     doc = Image.open(io.BytesIO(x.read()))
-                    out_text = make_ocr(doc)
-                    text_list.append([line, out_text])
+                    text = pytesseract.image_to_string(doc)
+                    #out_text = make_ocr(doc)
+                    text_list.append([line, text])
                     counter = counter + 1
                     print(counter)
 
@@ -146,10 +147,12 @@ with zipfile.ZipFile(args.input_file, 'r') as zip_file:
 out_text_list = []
 for text in text_list:
     new_text =  full_arg_list + ":" + "document name" + text[0] + "the document" + text[1]
-    out_text_list.append[new_text]    
+    out_text_list.append(new_text)    
 #text_list = text_list.join()
 #text_list = args.prompt + ":" + text_list 
         
 with open (args.output_file, "w") as out_file:
-    out_file.write(text_list)
+    for x in out_text_list:
+        
+        out_file.write(x)
  
