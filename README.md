@@ -11,6 +11,7 @@ To run the model you either need a GPU with sufficient memory (~16GB), or enough
 
 ```
 salloc --mem=64G
+interact -t 48:00:00
 srun --pty=/bin/bash
 ```
 
