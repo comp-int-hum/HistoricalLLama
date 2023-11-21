@@ -25,7 +25,7 @@ import pickle
 # example, changing the number of folds).
 vars = Variables("custom.py")
 vars.AddVariables(
-    ("DATASETS", "", ["/home/tom/afl.zip"]),
+    ("DATASETS", "", ["/home/sbacker2/corpora/afl.zip"]),
 ("PROMPT", "", ["this is text produced by OCR, creating numerous mistakes. please produce a cleaned version of this text, making any changes that you believe you have a 90% or above certainty about."]))
 
 # Methods on the environment object are used all over the place, but it mostly serves to

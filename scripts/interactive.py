@@ -35,7 +35,7 @@ if __name__ == "__main__":
     parser.add_argument("--max_gen_len", dest="max_gen_len", default=1024, type=int)
     parser.add_argument("--max_batch_size", dest="max_batch_size", default=1, type=int)
     parser.add_argument("--use_gpu", dest="use_gpu", default=False, action="store_true")
-    parser.add_argument("--input", dest = input_file)
+    parser.add_argument("--input_file", dest = "input_file")
     args = parser.parse_args()
 
     if args.use_gpu and torch.cuda.is_available():
@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
     
     top_p = 0.9
-    temperature = 0.6
+    temperature = 0.1
 
     try:
         _, lock = tempfile.mkstemp(prefix="llama")
@@ -73,18 +73,30 @@ if __name__ == "__main__":
         model.load_state_dict(checkpoint, strict=False)
         llm = Llama(model, tokenizer, device)
         transcript = []
+
         with open (args.input_file, "r") as in_file:
-            for x in in_file:
-                query = x.strip()
-                transcript.append(query)
+            materials = json.load(in_file)
+            for x in materials:
+                name = x[0]
+                doc = x[1]
                 response = []
-                response.append(statement)
-                resp = llm.text_completion(query)
+                print("this is the prompt")
+                print(x[1])
+                response.append(x[0])
+                response.append(x[1])
+                #response.append(statement)
+                resp = llm.text_completion([x[1]])[0]
+                print("this is the response")
+                print(resp)
                 response.append(resp)
+                editedx = x[0].replace(':', '_')
+                editedx = editedx.replace("/", "_")
+                output_path = "work/" + editedx + ".txt"
                 transcript.append(response)
-        if args.output:
+                with open(output_path, "w") as out_file:
+                    out_file.write(json.dumps(response))
             with open(args.output, "wt") as ofd:
-                ofd.write(json.dumps(transcript, indent=2))
+                    json.dump(ofd,transcript)
     except Exception as e:
         raise e
     finally:

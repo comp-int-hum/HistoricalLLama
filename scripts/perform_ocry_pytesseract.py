@@ -48,7 +48,7 @@ full_arg_list = []
 
 for x in args.prompt:
     full_arg_list.append(x)
-full_arg_list = "".join(full_arg_list)
+full_arg_list = " ".join(full_arg_list)
 
 
 def make_ocr(the_file, seg_no = ""):
@@ -120,6 +120,7 @@ with zipfile.ZipFile(args.input_file, 'r') as zip_file:
                 
                 
                     doc = Image.open(io.BytesIO(x.read()))
+                    print(type(doc))
                     text = pytesseract.image_to_string(doc)
                     #out_text = make_ocr(doc)
                     text_list.append([line, text])
@@ -146,13 +147,11 @@ with zipfile.ZipFile(args.input_file, 'r') as zip_file:
 
 out_text_list = []
 for text in text_list:
-    new_text =  full_arg_list + ":" + "document name" + text[0] + "the document" + text[1]
+    new_text = [text[0], full_arg_list + "this is the document. Begin working here ==>" + text[1]]
     out_text_list.append(new_text)    
 #text_list = text_list.join()
 #text_list = args.prompt + ":" + text_list 
         
 with open (args.output_file, "w") as out_file:
-    for x in out_text_list:
-        
-        out_file.write(x)
+    json.dump(out_text_list, out_file)
  
