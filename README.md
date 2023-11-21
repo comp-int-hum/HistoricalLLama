@@ -9,6 +9,8 @@ It might be convenient to start `tmux` immediately on logging onto Rockfish, cre
 
 To run the model you either need a GPU with sufficient memory (~16GB), or enough RAM (~64GB) to run on the CPU.  On Rockfish (e.g. do this in that second tmux window), you can create a session with enough RAM and then get a terminal on it by running:
 
+interact -t 48:00:00
+
 ```
 salloc --mem=64G
 interact -t 48:00:00
